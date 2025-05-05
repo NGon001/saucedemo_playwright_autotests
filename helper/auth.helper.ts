@@ -1,9 +1,23 @@
 import { chromium } from '@playwright/test';
 import path from 'path';
+import fs from 'fs';
 
 const authFile = path.join(__dirname, '../playwright/.auth/user.json');
 
-export default async function globalSetup() {
+export function isAuthStateValid(): boolean {
+  if (!fs.existsSync(authFile)) {
+    return false; // File doesn't exist
+  }
+
+  const storageState = JSON.parse(fs.readFileSync(authFile, 'utf-8'));
+  const cookies = storageState.cookies || [];
+  const now = Date.now() / 1000; // Current time in seconds
+
+  // Check if any cookie is expired
+  return cookies.every(cookie => !cookie.expires || cookie.expires > now);
+}
+
+export async function regenerateAuthState() {
   const browser = await chromium.launch();
   const context = await browser.newContext();
   const page = await context.newPage();

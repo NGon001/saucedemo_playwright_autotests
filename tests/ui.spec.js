@@ -1,9 +1,15 @@
-import { test, expect } from '@playwright/test';
+import {test, expect } from '@playwright/test';
+import { isAuthStateValid, regenerateAuthState } from '../helper/auth.helper';
 
 var items = null;
 var count = 0;
 
 test.beforeEach(async ({ page }) => {
+    if (!isAuthStateValid()) {
+        console.log('Authentication state is invalid. Regenerating...');
+        await regenerateAuthState();
+        console.log('Authentication state regenerated.');
+      }
     await page.goto("https://www.saucedemo.com/inventory.html");
     await expect(page.getByText("Products")).toBeVisible();
 
