@@ -32,7 +32,6 @@ test('Items add to cart and remove from cart', async ({ page }) => {
 
 //Add random items 3/6 from the list of items to the cart and click on the cart icon to check if the items are added to the cart
 test('Add random items to cart and check cart', async ({ page }) => {
-
     var itemsTotalPrice = 0;
     const indices = Array.from({ length: count }, (_, i) => i);
     const shuffled = indices.sort(() => 0.5 - Math.random()).slice(0, 3);
