@@ -1,20 +1,6 @@
-import { chromium } from '@playwright/test';
 import path from 'path';
-
-const authFile = path.join(__dirname, '../playwright/.auth/user.json');
+import {regenerateAuthState } from '../helper/auth.helper';
 
 export default async function globalSetup() {
-  const browser = await chromium.launch();
-  const context = await browser.newContext();
-  const page = await context.newPage();
-
-  // Perform authentication steps
-  await page.goto('https://www.saucedemo.com/');
-  await page.getByPlaceholder("Username").fill("standard_user");
-  await page.getByPlaceholder("Password").fill("secret_sauce");
-  await page.locator("#login-button").click();
-  await page.waitForURL("https://www.saucedemo.com/inventory.html");
-  await page.context().storageState({ path: authFile });
-
-  await browser.close();
+  await regenerateAuthState();
 }
