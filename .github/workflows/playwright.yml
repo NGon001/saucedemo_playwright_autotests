@@ -31,8 +31,11 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-playwright-
 
-    - name: Install only required Playwright browsers
-      run: npx playwright install chromium firefox webkit
+    - name: Install Chromium and Firefox only
+      run: npx playwright install chromium firefox
+
+    - name: Install WebKit with system dependencies (for Mobile Safari)
+      run: npx playwright install --with-deps webkit
 
     - name: Run Playwright tests
       run: npx playwright test
